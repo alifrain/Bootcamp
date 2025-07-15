@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic OOP", "Basic OOP\Basi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOOP", "BasicOOP\BasicOOP.csproj", "{27FB5FAC-83CB-47AF-B35A-D44913E32751}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions", "Functions\Functions.csproj", "{18695AB6-135F-4052-8602-34267B53480D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{27FB5FAC-83CB-47AF-B35A-D44913E32751}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27FB5FAC-83CB-47AF-B35A-D44913E32751}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27FB5FAC-83CB-47AF-B35A-D44913E32751}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18695AB6-135F-4052-8602-34267B53480D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18695AB6-135F-4052-8602-34267B53480D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18695AB6-135F-4052-8602-34267B53480D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18695AB6-135F-4052-8602-34267B53480D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

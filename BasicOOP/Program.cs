@@ -4,56 +4,47 @@ class Program
 {
     static void Main()
     {
-        Students s1 = new Students("Alif", "13119", 3.5);
+        Book b1 = new Book("C Mastery", "Alif", 2002);
 
-        s1.PrintInfo();
-        if (s1.IsCumlaude())
+        b1.PrintDetail();
+        if (b1.IsNew())
         {
-            Console.WriteLine("Status: Cumlaude");
+            Console.WriteLine("New Books");
         }
         else
         {
-            Console.WriteLine("Status : Biasa");
-        }
-
-        Console.WriteLine(); 
-
-        Students s2 = new Students("Raka", "13120", 3.2);
-
-        s2.PrintInfo();
-        if (s2.IsCumlaude())
-        {
-            Console.WriteLine("Status: Cumlaude");
-        }
-        else
-        {
-            Console.WriteLine("Status : Biasa");
+            Console.WriteLine("Old Books");
         }
     }
 }
 
-
-public class Students
+public class Book
 {
+    // Property
     public string Name;
-    public string NIM;
-    public double GPA;
+    public string Author;
+    public int Release;
 
-    public Students(string name, string nim, double gpa)
+    // Constructor
+    public Book(string name, string author, int release)
     {
         Name = name;
-        NIM = nim;
-        GPA = gpa;
+        Author = author;
+        Release = release;
     }
 
-    public void PrintInfo()
+    // method 1
+    public void PrintDetail()
     {
-        Console.WriteLine($"Nama: {Name}");
-        Console.WriteLine($"NIM:{NIM}");
-        Console.WriteLine($"IPK: {GPA}");
+        Console.WriteLine($"Nama : {Name}");
+        Console.WriteLine($"Author : {Author}");
+        Console.WriteLine($"Release : {Release}");
     }
-    public bool IsCumlaude()
+
+    // method 2
+    public bool IsNew()
     {
-        return GPA >= 3.5;
+        return Release >= 2000;
     }
+
 }
