@@ -1,0 +1,15 @@
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\bin\Debug\net8.0\statements.exe
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\bin\Debug\net8.0\statements.deps.json
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\bin\Debug\net8.0\statements.runtimeconfig.json
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\bin\Debug\net8.0\statements.dll
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\bin\Debug\net8.0\statements.pdb
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.AssemblyInfoInputs.cache
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.AssemblyInfo.cs
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.csproj.CoreCompileInputs.cache
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.sourcelink.json
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.dll
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\refint\statements.dll
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.pdb
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\statements.genruntimeconfig.cache
+C:\Users\Bootcamp 14 Alif\Documents\Bootcamp\statements\obj\Debug\net8.0\ref\statements.dll
