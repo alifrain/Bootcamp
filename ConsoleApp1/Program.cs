@@ -23,6 +23,10 @@
             {
                 Console.Write(i);
             }
+            if (i < n)
+            {
+                Console.Write(", ");
+            }
         }
 
     }
