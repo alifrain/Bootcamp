@@ -2,24 +2,20 @@ using System;
 
 namespace MyApp
 {
-// Delegate untuk event handler
-public delegate void ClickHandler(string message);
+    // Delegate untuk event handler
+    public delegate void ClickHandler(string message);
 
     // Kelas yang menggunakan delegate
-public class Button
+    public class Button
     {
         // Event yg pakai delegate
-        public event ClickHandler Clicked;
+        public event ClickHandler? Clicked;
 
         // Metode untuk memicu event
-        public void Press()
+        public void Press(string message)
         {
-            Console.WriteLine("Button pressed!");
-
-            if (Clicked != null)
-            {
-                Clicked("Button was clicked!");
-            }
+            Console.WriteLine("Logging button press...");
+            Clicked?.Invoke(message );
         }
     }
 }

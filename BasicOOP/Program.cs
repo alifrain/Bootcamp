@@ -1,50 +1,36 @@
 ﻿using System;
+using Students;
 
 class Program
 {
     static void Main()
     {
-        Book b1 = new Book("C Mastery", "Alif", 2002);
+        Console.Write("Masukkan angka pertama: ");
+        int a = int.Parse(Console.ReadLine());
 
-        b1.PrintDetail();
-        if (b1.IsNew())
+        Console.Write("Masukkan angka kedua: ");
+        int b = int.Parse(Console.ReadLine() ?? "0");
+
+        int hasil = a + b;
+        Console.WriteLine($"Hasil penjumlahan {a} + {b} = {hasil}");
+
+        int min = a - b;
+        Console.WriteLine($"Hasil pengurangan {a} - {b} = {min}");
+
+        int kali = a * b;
+        Console.WriteLine($"Hasil perkalian {a} * {b} = {kali}");
+
+        int bagi = a / b;
+        if (b == 0)
         {
-            Console.WriteLine("New Books");
+            Console.WriteLine("Pembagian dengan nol tidak diperbolehkan.");
+            return;
         }
-        else
-        {
-            Console.WriteLine("Old Books");
-        }
+        Console.WriteLine($"Hasil pembagian {a} / {b} = {bagi}");
+
+        Student s1 = new Student("Budi", "123456", 2.5);
+        s1.DisplayInfo();
+        s1.CheckIpk();
     }
-}
-
-public class Book
-{
-    // Property
-    public string Name;
-    public string Author;
-    public int Release;
-
-    // Constructor
-    public Book(string name, string author, int release)
-    {
-        Name = name;
-        Author = author;
-        Release = release;
-    }
-
-    // method 1
-    public void PrintDetail()
-    {
-        Console.WriteLine($"Nama : {Name}");
-        Console.WriteLine($"Author : {Author}");
-        Console.WriteLine($"Release : {Release}");
-    }
-
-    // method 2
-    public bool IsNew()
-    {
-        return Release >= 2000;
-    }
-
+         
 }
