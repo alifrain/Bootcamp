@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day6", "Day6\Day6.csproj", "{30F0AD45-AF06-4390-823C-CD207F2EDEEE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicExerice", "LogicExerice\LogicExerice.csproj", "{1C7CFFC9-AAD2-4CD1-A787-001F528E4E1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assigments", "Assigments\Assigments.csproj", "{2E9743A7-B0C1-4DE7-B54F-2D46B703029F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +88,13 @@ Global
 		{30F0AD45-AF06-4390-823C-CD207F2EDEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30F0AD45-AF06-4390-823C-CD207F2EDEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30F0AD45-AF06-4390-823C-CD207F2EDEEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C7CFFC9-AAD2-4CD1-A787-001F528E4E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C7CFFC9-AAD2-4CD1-A787-001F528E4E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C7CFFC9-AAD2-4CD1-A787-001F528E4E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C7CFFC9-AAD2-4CD1-A787-001F528E4E1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E9743A7-B0C1-4DE7-B54F-2D46B703029F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9743A7-B0C1-4DE7-B54F-2D46B703029F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9743A7-B0C1-4DE7-B54F-2D46B703029F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9743A7-B0C1-4DE7-B54F-2D46B703029F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
