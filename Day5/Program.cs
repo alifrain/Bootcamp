@@ -36,6 +36,9 @@ class Program
         Operation op2 = MathOperations.Subtract;
         Console.WriteLine(op2(5));
 
+        Operation op3 = MathOperations.Multiply;
+        Console.WriteLine(op3(5));
+
         Button btn = new Button();
 
         btn.Clicked += RespondToClick;
@@ -63,12 +66,10 @@ class Program
         }
         catch (FormatException)
         {
-            // TODO: Tangani jika input bukan angka
             Console.WriteLine("Error: Masukkan harus berupa angka.");
         }
         finally
         {
-            // TODO: Tambahkan pesan penutup (opsional)
             Console.WriteLine("Program selesai dijalankan.");
         }
 

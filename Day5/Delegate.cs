@@ -12,6 +12,11 @@ namespace MyApp
         {
             return x - 5;
         }
+
+        public static int Multiply(int x)
+        {
+            return x * 2;
+        }
     }
 
 }
