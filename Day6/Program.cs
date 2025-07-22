@@ -21,8 +21,8 @@ class Program
         Fraction a = new Fraction(1, 2);
         Fraction b = new Fraction(1, 3);
 
-        Fraction resultAdd = a + b;
-        Fraction resultMultiply = a * b;
+        Fraction resultAdd = a + b; 
+        Fraction resultMultiply = a * b; 
 
         Console.WriteLine($"Hasil penjumlahan {a} + {b} = {resultAdd}");
         Console.WriteLine($"Hasil perkalian {a} * {b} = {resultMultiply}");
