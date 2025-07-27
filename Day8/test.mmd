@@ -1,111 +1,108 @@
 classDiagram
-class Game {
-  -GameController controller
-  +Start()
-}
-class GameController {
-  -IBoard board
-  -List~IPlayer~ players
-  -int currentPlayerIndex
-  -Action~Move~ OnMoveExecuted
-  + StartGame()
-  + HandleMove(Move)
-  + EvaluateMove(Move): bool
-  + MovePiece(Piece, Position)
-  + CapturePiece(Move)
-  + HasForcedCaptures(IPlayer): bool    
-  + GetCaptureChain(Move): List~Move~ 
-  + PromoteIfNeeded(Piece)
-  + SwitchTurn()
-  + GetCurrentPlayer(): IPlayer
-  + GetAllValidMoves(IPlayer): List~Move~
-  + IsGameOver(): bool
-  + EndGame()
-}
-class IBoard {
-  +InitializeBoard(List~IPlayer~)
-  +GetCell(int, int): ICell
-  +PlacePiece(Piece)
-  +GetAllCells(): List~ICell~
-  <<interface>>
-}
-class Board {
-  -ICell[][] grid
-  +InitializeBoard(List~IPlayer~)
-  +GetCell(int, int): ICell
-  +PlacePiece(Piece)
-  +GetAllCells(): List~ICell~
-}
-class IPlayer {
-  +GetColor(): PieceColor
-  +GetName(): string
-  +IsBottom(): bool
-  <<interface>>
-}
-class Player {
-  -string name
-  -PieceColor color
-  -bool isBottomPlayer
-  +GetColor(): PieceColor
-  +GetName(): string
-  +IsBottom(): bool
-}
-class ICell {
-  +GetPosition(): Position
-  +SetPosition(Position)
-  +GetPiece(): Piece
-  +SetPiece(Piece)
-  <<interface>>
-}
-class Cell {
-  -Position position
-  -Piece piece
-  +GetPosition(): Position
-  +SetPosition(Position)
-  +GetPiece(): Piece
-  +SetPiece(Piece)
-}
-class Position {
-  +int X
-  +int Y
-  <<record struct>>
-}
-class PieceType {
-  +normal
-  +king
-  <<enumeration>>
-}
-class PieceColor {
-  +red
-  +black
-  <<enumeration>>
-}
-class Piece {
-  -PieceColor color
-  -Position position
-  -PieceType type
-  +GetColor(): PieceColor
-  +GetPosition(): Position
-  +GetType(): PieceType
-  +SetType(PieceType)
-  +CanMoveTo(Position, IBoard): bool
-  +GetPossibleMoves(IBoard): List~Move~
-}
-class Move {
-  +From: Position
-  +To: Position
-  +CapturedPositions: List~Position~
-  +IsCapture(): bool  
-}
-Game --> GameController 
-GameController --> IBoard : Uses
-GameController --> IPlayer : Controls
-GameController --> Move : Processes
-IBoard <|-- Board
-IPlayer <|-- Player
-ICell <|-- Cell
-IBoard --> ICell : Contains
-ICell --> Position
-ICell --> Piece : Holds
-Piece --> PieceColor : Has
-Piece --> PieceType : Has
+    class GameController {
+        -IBoard board
+        -List~IPlayer~ players
+        -int currentPlayerIndex
+        +Action~Position,Position~ OnMoveExecuted
+        + StartGame()
+        + HandleMove(Position, Position)
+        + CanMoveTo(Position, IBoard): bool
+        + GetPossibleMoves(IBoard): List~Position~
+        + EvaluateMove(Position, Position): bool
+        + GetCapturedPositions(Position, Position): List~Position~
+        + IsCapture(Position, Position): bool
+        + MovePiece(IPiece, Position)
+        + CapturePiece(Position, Position)
+        + HasForcedCaptures(IPlayer): bool      
+        + GetCaptureChain(Position, Position): List~Position~
+        + PromoteIfNeeded(IPiece)
+        + SwitchTurn()
+        + GetCurrentPlayer(): IPlayer
+        + GetAllValidMoves(IPlayer): List~Position[]~
+        + IsGameOver(): bool
+        + EndGame()
+    }
+
+    class IBoard {
+        +InitializeBoard(List~IPlayer~)
+        +GetPiece(int, int): IPiece
+        +SetPiece(int, int, IPiece)
+        <>
+    }
+
+    class Board {
+        -IPiece[][] grid
+        +InitializeBoard(List~IPlayer~)
+        +GetPiece(int, int): IPiece
+        +SetPiece(int, int, IPiece)
+    }
+
+    class IPlayer {
+        +GetColor(): PieceColor
+        +GetName(): string
+        +IsBottom(): bool
+        <>
+    }
+
+    class Player {
+        -string name
+        -PieceColor color
+        -bool isBottomPlayer
+        +GetColor(): PieceColor
+        +GetName(): string
+        +IsBottom(): bool
+    }
+
+    class Position {
+        +int X
+        +int Y
+        << record struct >>
+    }
+
+    class PieceType {
+        NORMAL
+        KING
+        << enum >>
+    }
+
+    class PieceColor {
+        RED
+        BLACK
+        << enum >>
+    }
+
+    class IPiece {
+        +GetColor(): PieceColor
+        +GetPosition(): Position
+        +SetPosition(Position)
+        +GetType(): PieceType
+        +SetType(PieceType)
+        +CanMoveTo(Position, IBoard): bool
+        +GetPossibleMoves(IBoard): List~Position~
+        <>
+    }
+
+    class Piece {
+        -PieceColor color
+        -Position position
+        -PieceType type
+        +GetColor(): PieceColor
+        +GetPosition(): Position
+        +SetPosition(Position)
+        +GetType(): PieceType
+        +SetType(PieceType)
+        +CanMoveTo(Position, IBoard): bool
+        +GetPossibleMoves(IBoard): List~Position~
+    }
+
+    GameController --> IBoard : Uses
+    GameController --> IPlayer : Controls
+    GameController --> Position : Processes
+    IBoard <|-- Board
+    IPlayer <|-- Player
+    IPiece <|-- Piece
+    IBoard --> IPiece : Manages
+    IPiece --> Position : Has
+    IPiece --> PieceColor : Has
+    IPiece --> PieceType : Has
+    Player --> IPiece : Owns
