@@ -1,8 +1,9 @@
 classDiagram
     class GameController {
         -IBoard board
-        -List~IPlayer~ players
+        -IPlayer[] players
         -int currentPlayerIndex
+        -Dictionary~PieceColor, IPlayer~ playersByColor
         +Action~Position,Position~ OnMoveExecuted
         + StartGame()
         + HandleMove(Position, Position)
@@ -22,76 +23,59 @@ classDiagram
         + IsGameOver(): bool
         + EndGame()
     }
-
+    
     class IBoard {
-        +InitializeBoard(List~IPlayer~)
         +GetPiece(int, int): IPiece
         +SetPiece(int, int, IPiece)
-        <>
     }
-
+    
     class Board {
-        -IPiece[][] grid
-        +InitializeBoard(List~IPlayer~)
+        -IPiece[,] grid
         +GetPiece(int, int): IPiece
         +SetPiece(int, int, IPiece)
     }
-
+    
     class IPlayer {
-        +GetColor(): PieceColor
-        +GetName(): string
-        +IsBottom(): bool
-        <>
+        +Color: PieceColor
+        +Name: string
     }
-
+    
     class Player {
         -string name
         -PieceColor color
-        -bool isBottomPlayer
-        +GetColor(): PieceColor
-        +GetName(): string
-        +IsBottom(): bool
     }
-
+    
     class Position {
         +int X
         +int Y
         << record struct >>
     }
-
+    
     class PieceType {
         NORMAL
         KING
         << enum >>
     }
-
+    
     class PieceColor {
         RED
         BLACK
         << enum >>
     }
-
+    
     class IPiece {
-        +GetColor(): PieceColor
-        +GetPosition(): Position
-        +SetPosition(Position)
-        +GetType(): PieceType
-        +SetType(PieceType)
-        <>
+        +Color: PieceColor
+        +Position: Position
+        +Type: PieceType
     }
-
+    
     class Piece {
         -PieceColor color
         -Position position
         -PieceType type
-        +GetColor(): PieceColor
-        +GetPosition(): Position
-        +SetPosition(Position)
-        +GetType(): PieceType
-        +SetType(PieceType)
     }
-
-   GameController --> IBoard
+    
+    GameController --> IBoard
     GameController --> IPlayer
     GameController --> IPiece
     GameController --> Position
@@ -99,10 +83,5 @@ classDiagram
     IBoard <|-- Board
     IPlayer <|-- Player
     IPiece <|-- Piece
-    
-    IPiece --> Position
-    IPiece --> PieceColor
-    IPiece --> PieceType
-    
-    IBoard --> IPiece
-    IPlayer --> PieceColor
+    Piece <|-- PieceType
+    Piece <|-- PieceColor

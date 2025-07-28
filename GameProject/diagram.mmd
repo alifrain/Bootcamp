@@ -1,0 +1,91 @@
+classDiagram
+        class GameController{
+            - IBoard _board
+            - Dictionary ~IPlayer, IPiece~ _players
+            - int[,] _direction
+            + Action OnBoardUpdated
+            + Action~string~ OnGameEnded
+
+            + GameController(IPlayer player1, IPlayer player2, IPiece piece)
+            + StartGame()  void
+            + UpdateScore()  void
+            + MakeMove(IBoard board, List~Position~ validMove, Dictionary ~IPlayer, IPiece~ player)  Position
+            + GetValidMoves(IBoard board, Dictionary ~IPlayer, IPiece~ player) : List~Position~
+            + GetFlippedPositions(IBoard board, int row, int col, Dictionary ~IPlayer, IPiece~ player)  List~Position~
+            + GetOpponent(Dictionary ~IPlayer, IPiece~ player)  Dictionary ~IPlayer, IPiece~ player
+            + ApplyMove(Position pos, Dictionary ~IPlayer, IPiece~ player) void
+            + GetOpponentType(Dictionary ~IPlayer, IPiece~ player)  Dictionary ~IPlayer, IPiece~ player
+            + SwitchTurn() void
+            + GetBoard() IBoard
+            + ResetBoard() void
+            + Endgame()  void
+
+        }
+        
+        class IPlayer {
+            <<interface>>
+            + string Username
+            + int Score
+        }
+
+        class Player {
+            + string Username 
+            + int Score = 2
+            + Player(string name)
+        }
+
+    
+        class IBoard{
+            <<interface>>
+            + IPiece[,] Grid
+        }
+
+        class Board{
+            + IPiece[,] Grid 
+            + Board()
+        }
+        
+        class IPiece {
+            + ColorType Type
+        }
+
+        class Piece {
+            + ColorType Type
+            + Piece(ColorType type)
+        }
+
+        class ColorType{
+            <<Enum>>
+            None
+            Black
+            White
+        }
+
+        class Position {
+            <<struct record>>
+
+            Row : int
+            Col : int
+        }
+
+GameController --* IBoard
+GameController --* IPlayer
+GameController --* IPiece
+GameController --> Position
+GameController --> ColorType
+
+Board --> IPiece
+IBoard --> IPiece
+
+%% Piece --> ColorType
+
+%% Player --> Piece
+
+IBoard --> Board
+%% IBoard --> ColorType
+IPlayer --> Player
+%% IPlayer --> Piece
+
+IPiece --> Piece
+
+
