@@ -77,8 +77,6 @@ classDiagram
         +SetPosition(Position)
         +GetType(): PieceType
         +SetType(PieceType)
-        +CanMoveTo(Position, IBoard): bool
-        +GetPossibleMoves(IBoard): List~Position~
         <>
     }
 
@@ -91,18 +89,20 @@ classDiagram
         +SetPosition(Position)
         +GetType(): PieceType
         +SetType(PieceType)
-        +CanMoveTo(Position, IBoard): bool
-        +GetPossibleMoves(IBoard): List~Position~
     }
 
-    GameController --> IBoard : Uses
-    GameController --> IPlayer : Controls
-    GameController --> Position : Processes
+   GameController --> IBoard
+    GameController --> IPlayer
+    GameController --> IPiece
+    GameController --> Position
+
     IBoard <|-- Board
     IPlayer <|-- Player
     IPiece <|-- Piece
-    IBoard --> IPiece : Manages
-    IPiece --> Position : Has
-    IPiece --> PieceColor : Has
-    IPiece --> PieceType : Has
-    Player --> IPiece : Owns
+    
+    IPiece --> Position
+    IPiece --> PieceColor
+    IPiece --> PieceType
+    
+    IBoard --> IPiece
+    IPlayer --> PieceColor

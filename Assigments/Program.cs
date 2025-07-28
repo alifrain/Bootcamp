@@ -1,49 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 
 class Program
 {
     static void Main()
     {
-
-        // Masukkan input dulu
         Console.Write("Masukkan nilai n: ");
         int n = int.Parse(Console.ReadLine() ?? "0");
 
-        // Looping
+        var rules = new Dictionary<int, string>
+        {
+            { 3, "foo" },
+            { 4, "baz" },
+            { 5, "bar" },
+            { 7, "jazz" },
+            { 9, "huzz" }
+        };
+
         for (int x = 1; x <= n; x++)
         {
-            if (x % 3 == 0 && x % 5 == 0 && x % 7 == 0)
+            string result = "";
+            
+            foreach (var rule in rules)
             {
-                Console.Write("foobarjazz");
+                if (x % rule.Key == 0)
+                {
+                    result += rule.Value;
+                }
             }
-            else if (x % 3 == 0 && x % 5 == 0)
+            
+            if (string.IsNullOrEmpty(result))
             {
-                Console.Write("foobar");
+                result = x.ToString();
             }
-            else if (x % 3 == 0 && x % 7 == 0)
-            {
-                Console.Write("foojazz");
-            }
-            else if (x % 5 == 0 && x % 7 == 0)
-            {
-                Console.Write("barjazz");
-            }
-            else if (x % 3 == 0)
-            {
-                Console.Write("foo");
-            }
-            else if (x % 5 == 0)
-            {
-                Console.Write("bar");
-            }
-            else if (x % 7 == 0)
-            {
-                Console.Write("jazz");
-            }
-            else
-            {
-                Console.Write(x);
-            }
+            
+            Console.Write(result);
+            
             if (x < n)
                 Console.Write(", ");
         }
