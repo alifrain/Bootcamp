@@ -35,6 +35,39 @@ public class GameController
     {
         UpdateScore();
         DisplayBoard();
+
+        Console.WriteLine($"Game started! {_currentPlayer.UserName}'s turn ({_players[_currentPlayer].Color}).");
+        
+        while (!IsGameOver())
+        {
+            var validMoves = GetValidMoves(_board, new Dictionary<IPlayer, IPiece> { { _currentPlayer, _players[_currentPlayer] } });
+            
+            if (validMoves.Count == 0)
+            {
+                Console.WriteLine($"No valid moves for {_currentPlayer.UserName}. Skipping turn.");
+                SwitchTurn();
+                Console.WriteLine($"\n{_currentPlayer.UserName}'s turn ({_players[_currentPlayer].Color}).");
+                continue;
+            }
+
+            Console.WriteLine($"\nValid moves: {string.Join(", ", validMoves.Select(p => $"({p.Row},{p.Col})"))}");
+            
+            var move = GetPlayerMove(validMoves);
+            ApplyMove(move, new Dictionary<IPlayer, IPiece> { { _currentPlayer, _players[_currentPlayer] } });
+            
+            UpdateScore();
+            DisplayBoard();
+            DisplayScore();
+            
+            if (IsGameOver())
+            {
+                EndGame();
+                break;
+            }
+            
+            SwitchTurn();
+            Console.WriteLine($"\n{_currentPlayer.UserName}'s turn ({_players[_currentPlayer].Color}).");
+        }
     }
 
     public void UpdateScore()
@@ -115,6 +148,191 @@ public class GameController
             return position;
         }
     }
-    
-    
+
+    public List<Position> GetValidMoves(IBoard board, Dictionary<IPlayer, IPiece> player)
+    {
+        var validMoves = new List<Position>();
+        var playerPiece = player.Values.First();
+
+        for (int row = 0; row < 8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                if (board.Grid[row, col].Color == ColorType.None)
+                {
+                    var flippedPositions = GetFlippedPositions(board, row, col, player);
+                    if (flippedPositions.Count > 0)
+                    {
+                        validMoves.Add(new Position(row, col));
+                    }
+                }
+            }
+        }
+
+        return validMoves;
+    }
+
+    public List<Position> GetFlippedPositions(IBoard board, int row, int col, Dictionary<IPlayer, IPiece> player)
+    {
+        var flippedPositions = new List<Position>();
+        var playerColor = player.Values.First().Color;
+        var opponentColor = GetOpponentColor(playerColor);
+
+        // Check all 8 directions
+        for (int dir = 0; dir < 8; dir++)
+        {
+            var tempFlipped = new List<Position>();
+            int currentRow = row + _directions[dir, 0];
+            int currentCol = col + _directions[dir, 1];
+
+            // Look for opponent pieces in this direction
+            while (IsValidPosition(currentRow, currentCol) && 
+                   board.Grid[currentRow, currentCol].Color == opponentColor)
+            {
+                tempFlipped.Add(new Position(currentRow, currentCol));
+                currentRow += _directions[dir, 0];
+                currentCol += _directions[dir, 1];
+            }
+
+            // If we found opponent pieces and ended with our piece, these are valid flips
+            if (tempFlipped.Count > 0 && 
+                IsValidPosition(currentRow, currentCol) && 
+                board.Grid[currentRow, currentCol].Color == playerColor)
+            {
+                flippedPositions.AddRange(tempFlipped);
+            }
+        }
+
+        return flippedPositions;
+    }
+
+    public Dictionary<IPlayer, IPiece> GetOpponent(Dictionary<IPlayer, IPiece> player)
+    {
+        var currentPlayerKey = player.Keys.First();
+        var opponent = _players.Keys.First(p => p != currentPlayerKey);
+        return new Dictionary<IPlayer, IPiece> { { opponent, _players[opponent] } };
+    }
+
+    public void ApplyMove(Position pos, Dictionary<IPlayer, IPiece> player)
+    {
+        var playerPiece = player.Values.First();
+        var flippedPositions = GetFlippedPositions(_board, pos.Row, pos.Col, player);
+
+        // Place the new piece
+        ((Board)_board).Grid[pos.Row, pos.Col] = new Piece(playerPiece.Color);
+
+        // Flip the captured pieces
+        foreach (var flipPos in flippedPositions)
+        {
+            ((Board)_board).Grid[flipPos.Row, flipPos.Col] = new Piece(playerPiece.Color);
+        }
+    }
+
+    public Dictionary<IPlayer, IPiece> GetOpponentType(Dictionary<IPlayer, IPiece> player)
+    {
+        return GetOpponent(player);
+    }
+
+    public void SwitchTurn()
+    {
+        _currentPlayer = _players.Keys.First(p => p != _currentPlayer);
+    }
+
+    public IBoard GetBoard()
+    {
+        return _board;
+    }
+
+    public void ResetBoard()
+    {
+        _board = new Board();
+        foreach (var player in _players.Keys)
+        {
+            player.Score = 2;
+        }
+        _currentPlayer = _players.Keys.First();
+    }
+
+    public void EndGame()
+    {
+        UpdateScore();
+        var winner = _players.Keys.OrderByDescending(p => p.Score).First();
+        var loser = _players.Keys.OrderBy(p => p.Score).First();
+        
+        Console.WriteLine("\n" + new string('=', 50));
+        Console.WriteLine("                 GAME OVER!");
+        Console.WriteLine(new string('=', 50));
+        
+        if (winner.Score == loser.Score)
+        {
+            Console.WriteLine("It's a TIE!");
+        }
+        else
+        {
+            Console.WriteLine($"🎉 WINNER: {winner.UserName}!");
+            Console.WriteLine($"Final Score: {winner.UserName} {winner.Score} - {loser.Score} {loser.UserName}");
+        }
+        
+        var message = winner.Score == loser.Score ? "Game ended in a tie!" : 
+                     $"Game Over! Winner: {winner.UserName} with {winner.Score} pieces!";
+        
+        OnGameEnded?.Invoke(message);
+    }
+
+    // Helper methods
+    private void DisplayBoard()
+    {
+        Console.WriteLine("\n    0 1 2 3 4 5 6 7");
+        Console.WriteLine("  ┌─────────────────┐");
+        
+        for (int row = 0; row < 8; row++)
+        {
+            Console.Write($"{row} │ ");
+            for (int col = 0; col < 8; col++)
+            {
+                char symbol = _board.Grid[row, col].Color switch
+                {
+                    ColorType.Black => 'B',
+                    ColorType.White => 'W',
+                    ColorType.None => '.'
+                };
+                Console.Write(symbol + " ");
+            }
+            Console.WriteLine("│");
+        }
+        Console.WriteLine("  └─────────────────┘");
+    }
+
+    private void DisplayScore()
+    {
+        Console.WriteLine("\n📊 CURRENT SCORE:");
+        foreach (var playerPair in _players)
+        {
+            char symbol = playerPair.Value.Color == ColorType.Black ? 'B' : 'W';
+            Console.WriteLine($"   {playerPair.Key.UserName} ({symbol}): {playerPair.Key.Score}");
+        }
+    }
+    private bool IsValidPosition(int row, int col)
+    {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+
+    private ColorType GetOpponentColor(ColorType color)
+    {
+        return color == ColorType.Black ? ColorType.White : ColorType.Black;
+    }
+
+    private bool IsGameOver()
+    {
+        // Game is over if no valid moves for both players or board is full
+        foreach (var playerPair in _players)
+        {
+            var validMoves = GetValidMoves(_board, new Dictionary<IPlayer, IPiece> { { playerPair.Key, playerPair.Value } });
+            if (validMoves.Count > 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
