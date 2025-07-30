@@ -3,7 +3,7 @@ classDiagram
         -IBoard board
         -IPlayer[] players
         -int currentPlayerIndex
-        -Dictionary~PieceColor, IPlayer~ playersByColor
+        -Dictionary~IPiece, IPlayer~ players
         +Action~Position,Position~ OnMoveExecuted
         + StartGame()
         + HandleMove(Position, Position)
@@ -30,7 +30,7 @@ classDiagram
     }
     
     class Board {
-        -IPiece[,] grid
+        +IPiece[,] grid
         +GetPiece(int, int): IPiece
         +SetPiece(int, int, IPiece)
     }
@@ -41,8 +41,8 @@ classDiagram
     }
     
     class Player {
-        -string name
-        -PieceColor color
+        +string name
+        +PieceColor color
     }
     
     class Position {
@@ -70,9 +70,9 @@ classDiagram
     }
     
     class Piece {
-        -PieceColor color
-        -Position position
-        -PieceType type
+        +PieceColor color
+        +Position position
+        +PieceType type
     }
     
     GameController --> IBoard
