@@ -3,7 +3,6 @@ using System.Dynamic;
 using Microsoft.VisualBasic;
 namespace OthelloGameProject;
 
-// Enums dan Records
 
 public record struct Position(int Row, int Col);
 

@@ -9,7 +9,6 @@ public class GameController
     private int[,] _directions;
     private IPlayer _currentPlayer;
     public event Action OnBoardUpdated;
-
     public event Action<string> OnGameEnded;
 
     public GameController(IPlayer player1, IPlayer player2, IPiece piece1, IPiece piece2)
@@ -178,7 +177,7 @@ public class GameController
         var playerColor = player.Values.First().Color;
         var opponentColor = GetOpponentColor(playerColor);
 
-        // Check all 8 directions
+        
         for (int dir = 0; dir < 8; dir++)
         {
             var tempFlipped = new List<Position>();
@@ -218,10 +217,8 @@ public class GameController
         var playerPiece = player.Values.First();
         var flippedPositions = GetFlippedPositions(_board, pos.Row, pos.Col, player);
 
-        // Place the new piece
         ((Board)_board).Grid[pos.Row, pos.Col] = new Piece(playerPiece.Color);
 
-        // Flip the captured pieces
         foreach (var flipPos in flippedPositions)
         {
             ((Board)_board).Grid[flipPos.Row, flipPos.Col] = new Piece(playerPiece.Color);
