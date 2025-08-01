@@ -10,7 +10,7 @@ public class Program
 {
     public static void Main()
     {
-        Console.WriteLine("🎮 Welcome to OTHELLO! 🎮");
+        Console.WriteLine("Welcome to OTHELLO");
         Console.WriteLine("═══════════════════════════");
         Console.WriteLine("Rules:");
         Console.WriteLine("• Players take turns placing pieces");
