@@ -68,7 +68,38 @@ public class GameController
             Console.WriteLine($"\n{_currentPlayer.UserName}'s turn ({_players[_currentPlayer].Color}).");
         }
     }
+    private void DisplayBoard()
+    {
+        Console.WriteLine("\n    0 1 2 3 4 5 6 7");
+        Console.WriteLine("  ┌─────────────────┐");
+        
+        for (int row = 0; row < 8; row++)
+        {
+            Console.Write($"{row} │ ");
+            for (int col = 0; col < 8; col++)
+            {
+                char symbol = _board.Grid[row, col].Color switch
+                {
+                    ColorType.Black => 'B',
+                    ColorType.White => 'W',
+                    ColorType.None => '.'
+                };
+                Console.Write(symbol + " ");
+            }
+            Console.WriteLine("│");
+        }
+        Console.WriteLine("  └─────────────────┘");
+    }
 
+    private void DisplayScore()
+    {
+        Console.WriteLine("\n CURRENT SCORE:");
+        foreach (var playerPair in _players)
+        {
+            char symbol = playerPair.Value.Color == ColorType.Black ? 'B' : 'W';
+            Console.WriteLine($"   {playerPair.Key.UserName} ({symbol}): {playerPair.Key.Score}");
+        }
+    }
     public void UpdateScore()
     {
         foreach (var player in _players.Keys)
@@ -266,7 +297,7 @@ public class GameController
         }
         else
         {
-            Console.WriteLine($"🎉 WINNER: {winner.UserName}!");
+            Console.WriteLine($"WINNER: {winner.UserName}!");
             Console.WriteLine($"Final Score: {winner.UserName} {winner.Score} - {loser.Score} {loser.UserName}");
         }
         
@@ -276,39 +307,6 @@ public class GameController
         OnGameEnded?.Invoke(message);
     }
 
-    // Helper methods
-    private void DisplayBoard()
-    {
-        Console.WriteLine("\n    0 1 2 3 4 5 6 7");
-        Console.WriteLine("  ┌─────────────────┐");
-        
-        for (int row = 0; row < 8; row++)
-        {
-            Console.Write($"{row} │ ");
-            for (int col = 0; col < 8; col++)
-            {
-                char symbol = _board.Grid[row, col].Color switch
-                {
-                    ColorType.Black => 'B',
-                    ColorType.White => 'W',
-                    ColorType.None => '.'
-                };
-                Console.Write(symbol + " ");
-            }
-            Console.WriteLine("│");
-        }
-        Console.WriteLine("  └─────────────────┘");
-    }
-
-    private void DisplayScore()
-    {
-        Console.WriteLine("\n📊 CURRENT SCORE:");
-        foreach (var playerPair in _players)
-        {
-            char symbol = playerPair.Value.Color == ColorType.Black ? 'B' : 'W';
-            Console.WriteLine($"   {playerPair.Key.UserName} ({symbol}): {playerPair.Key.Score}");
-        }
-    }
     private bool IsValidPosition(int row, int col)
     {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
@@ -321,7 +319,6 @@ public class GameController
 
     private bool IsGameOver()
     {
-        // Game is over if no valid moves for both players or board is full
         foreach (var playerPair in _players)
         {
             var validMoves = GetValidMoves(_board, new Dictionary<IPlayer, IPiece> { { playerPair.Key, playerPair.Value } });

@@ -39,7 +39,7 @@ public class Program
         game.OnBoardUpdated += () => { /* Board display is handled in game loop */ };
         game.OnGameEnded += (message) => Console.WriteLine($"\n🎊 {message}");
 
-        Console.WriteLine("\n🚀 Starting game...");
+        Console.WriteLine(" Starting game...");
 
         try
         {

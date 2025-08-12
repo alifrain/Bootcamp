@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalGameProject", "FinalGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Threading", "Threading\Threading.csproj", "{113EFD78-E27B-478D-AEB8-97EFB3D4C34F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -279,6 +281,18 @@ Global
 		{113EFD78-E27B-478D-AEB8-97EFB3D4C34F}.Release|x64.Build.0 = Release|Any CPU
 		{113EFD78-E27B-478D-AEB8-97EFB3D4C34F}.Release|x86.ActiveCfg = Release|Any CPU
 		{113EFD78-E27B-478D-AEB8-97EFB3D4C34F}.Release|x86.Build.0 = Release|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Debug|x64.Build.0 = Debug|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Debug|x86.Build.0 = Debug|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Release|x64.ActiveCfg = Release|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Release|x64.Build.0 = Release|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Release|x86.ActiveCfg = Release|Any CPU
+		{A023A3B1-0831-4C8C-BFA6-1548FE5163DE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
