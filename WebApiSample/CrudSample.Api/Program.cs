@@ -1,6 +1,14 @@
 using CrudSample.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using CrudSample.Api.Mappings;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using CrudSample.Api.Validators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using CrudSample.Api.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +20,35 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
 {
     o.SwaggerDoc("v1", new OpenApiInfo { Title = "CrudSample API", Version = "v1" });
-    // kalau nanti pakai JWT, definisikan security scheme di sini
+    // JWT 
+    o.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Bearer {your JWT token}"
+    });
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
-// --- Register AppDbContext (Fluent API configs are in the DbContext assembly) ---
-// Gunakan SQLite untuk development cepat; ganti ke UseSqlServer(...) jika perlu.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
 // Repositories & UoW
 builder.Services.AddScoped(typeof(CrudSample.Api.Repositories.Interfaces.IRepository<>),
                            typeof(CrudSample.Api.Repositories.Implementations.EfRepository<>));
@@ -30,16 +60,47 @@ builder.Services.AddScoped<CrudSample.Api.Repositories.Implementations.IUnitOfWo
 // Services
 builder.Services.AddScoped<CrudSample.Api.Services.Interfaces.IEmployeeService,
                            CrudSample.Api.Services.Implementations.EmployeeService>();
+
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+// FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<EmployeeCreateValidator>();
+
+// Bind JwtOptions + token service
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+// JWT authentication
+var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>()!;
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme    = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(o =>
+{
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwt.Issuer,
+        ValidAudience = jwt.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
+    };
+});
+
 var app = builder.Build();
 
-// --- Middleware pipeline ---
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CrudSample API v1"));
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 app.Run();

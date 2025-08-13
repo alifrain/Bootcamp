@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CrudSample.Api.Models;
-using CrudSample.Api.Services.Interfaces;
 using CrudSample.Api.DTOs;
+using CrudSample.Api.Services.Interfaces;
 
 namespace CrudSample.Api.Controllers;
 
@@ -14,49 +13,39 @@ public class EmployeesController : ControllerBase
     public EmployeesController(IEmployeeService svc) => _svc = svc;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
+    [AllowAnonymous]
+    public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetAll()
+        => Ok(await _svc.GetAllAsync());
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var e = await _svc.GetByIdAsync(id);
-        return e is null ? NotFound() : Ok(e);
-    }
-
-    [AllowAnonymous] // nanti aktifkan JWT
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] EmployeeCreateDto dto)
-    {
-        var entity = new Employee { Name = dto.Name, DepartmentId = dto.DepartmentId };
-        var created = await _svc.CreateAsync(entity);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, new {
-            created.Id, created.Name, created.DepartmentId,
-            DepartmentName = created.Department?.Name
-        });
-    }
-
-
     [AllowAnonymous]
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] Employee payload)
+    public async Task<ActionResult<EmployeeDto>> GetById(int id)
     {
-        await _svc.UpdateAsync(id, payload);
+        var dto = await _svc.GetByIdAsync(id);
+        return dto is null ? NotFound() : Ok(dto);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<ActionResult<EmployeeDto>> Create(EmployeeCreateDto dto)
+    {
+        var created = await _svc.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+    }
+
+    [HttpPut("{id:int}")]
+    [Authorize]
+    public async Task<IActionResult> Update(int id, EmployeeUpdateDto dto)
+    {
+        await _svc.UpdateAsync(id, dto);
         return NoContent();
     }
 
-    [AllowAnonymous]
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         await _svc.DeleteAsync(id);
-        return NoContent();
-    }
-
-    [AllowAnonymous]
-    [HttpPost("{id:int}/transfer/{deptId:int}")]
-    public async Task<IActionResult> Transfer(int id, int deptId)
-    {
-        await _svc.TransferDepartmentAsync(id, deptId);
         return NoContent();
     }
 }

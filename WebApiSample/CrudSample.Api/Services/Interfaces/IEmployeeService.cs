@@ -1,13 +1,12 @@
-using CrudSample.Api.Models;
+using CrudSample.Api.DTOs;
 
 namespace CrudSample.Api.Services.Interfaces;
 
 public interface IEmployeeService
 {
-    Task<IReadOnlyList<Employee>> GetAllAsync();
-    Task<Employee?> GetByIdAsync(int id);
-    Task<Employee> CreateAsync(Employee employee);
-    Task UpdateAsync(int id, Employee updated);
+    Task<IReadOnlyList<EmployeeDto>> GetAllAsync();
+    Task<EmployeeDto?> GetByIdAsync(int id);
+    Task<EmployeeDto> CreateAsync(EmployeeCreateDto dto);
+    Task UpdateAsync(int id, EmployeeUpdateDto dto);
     Task DeleteAsync(int id);
-    Task TransferDepartmentAsync(int employeeId, int newDepartmentId);
 }
