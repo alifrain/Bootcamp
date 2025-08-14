@@ -9,7 +9,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Department> Departments => Set<Department>();
     public DbSet<Employee> Employees => Set<Employee>();
-    public DbSet<Project> Projects => Set<Project>();
+    public DbSet<AuthUser> AuthUsers => Set<AuthUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

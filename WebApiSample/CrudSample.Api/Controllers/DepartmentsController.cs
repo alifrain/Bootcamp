@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using CrudSample.Api.Data;
-using CrudSample.Api.Models;
+using Microsoft.AspNetCore.Authorization;
+using CrudSample.Api.DTOs;
+using CrudSample.Api.Services.Interfaces;
 
 namespace CrudSample.Api.Controllers;
 
@@ -8,17 +9,43 @@ namespace CrudSample.Api.Controllers;
 [Route("api/[controller]")]
 public class DepartmentsController : ControllerBase
 {
-    private readonly AppDbContext _db;
-    public DepartmentsController(AppDbContext db) => _db = db;
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Department d)
-    {
-        await _db.Departments.AddAsync(d);
-        await _db.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetAll), new { id = d.Id }, d);
-    }
+    private readonly IDepartmentService _svc;
+    public DepartmentsController(IDepartmentService svc) => _svc = svc;
 
     [HttpGet]
-    public IActionResult GetAll() => Ok(_db.Departments.Select(x => new { x.Id, x.Name }));
+    [AllowAnonymous]
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll()
+        => Ok(await _svc.GetAllAsync());
+
+    [HttpGet("{id:int}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<DepartmentDto>> GetById(int id)
+    {
+        var dto = await _svc.GetByIdAsync(id);
+        return dto is null ? NotFound() : Ok(dto);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<ActionResult<DepartmentDto>> Create(DepartmentCreateDto dto)
+    {
+        var created = await _svc.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+    }
+
+    [HttpPut("{id:int}")]
+    [Authorize]
+    public async Task<IActionResult> Update(int id, DepartmentUpdateDto dto)
+    {
+        await _svc.UpdateAsync(id, dto);
+        return NoContent();
+    }
+
+    [HttpDelete("{id:int}")]
+    [Authorize]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _svc.DeleteAsync(id);
+        return NoContent();
+    }
 }

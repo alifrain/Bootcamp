@@ -15,10 +15,8 @@ internal class EmployeeConfig : IEntityTypeConfiguration<Employee>
             .IsRequired()
             .HasMaxLength(80);
 
-        // unique name per department (example business rule)
         builder.HasIndex(e => new { e.DepartmentId, e.Name }).IsUnique(false);
 
-        // configure many-to-many via implicit join table
         builder
             .HasMany(e => e.Projects)
             .WithMany(p => p.Members)

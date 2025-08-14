@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CrudSample.Api.Auth;
+using CrudSample.Api.Repositories.Interfaces;
+using CrudSample.Api.Repositories.Implementations;
+using CrudSample.Api.Services.Interfaces;
+using CrudSample.Api.Services.Implementations;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,16 +55,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
 // Repositories & UoW
-builder.Services.AddScoped(typeof(CrudSample.Api.Repositories.Interfaces.IRepository<>),
-                           typeof(CrudSample.Api.Repositories.Implementations.EfRepository<>));
-builder.Services.AddScoped<CrudSample.Api.Repositories.Interfaces.IEmployeeRepository,
-                           CrudSample.Api.Repositories.Implementations.EmployeeRepository>();
-builder.Services.AddScoped<CrudSample.Api.Repositories.Implementations.IUnitOfWork,
-                           CrudSample.Api.Repositories.Implementations.UnitOfWork>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Services
-builder.Services.AddScoped<CrudSample.Api.Services.Interfaces.IEmployeeService,
-                           CrudSample.Api.Services.Implementations.EmployeeService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -67,7 +70,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<EmployeeCreateValidator>();
-
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 // Bind JwtOptions + token service
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -99,6 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CrudSample API v1"));
 }
+
 
 app.UseAuthentication();
 app.UseAuthorization();

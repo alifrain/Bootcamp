@@ -6,5 +6,4 @@ public interface IEmployeeRepository : IRepository<Employee>
 {
     Task<Employee?> GetWithDepartmentAsync(int id);
     Task<bool> ExistsByNameInDepartmentAsync(string name, int departmentId, int? excludeId = null);
-    IQueryable<Employee> Query(); // expose IQueryable for advanced queries (use carefully)
 }

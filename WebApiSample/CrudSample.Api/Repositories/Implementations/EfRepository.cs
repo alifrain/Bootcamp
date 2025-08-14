@@ -16,7 +16,7 @@ public class EfRepository<T> : IRepository<T> where T : class
         _set = db.Set<T>();
     }
 
-    public virtual Task<T?> GetByIdAsync(int id) => _set.FindAsync(id).AsTask();
+    public virtual async Task<T?> GetByIdAsync(int id) => await _set.FindAsync(id);
 
     public virtual async Task<IReadOnlyList<T>> ListAsync(Expression<Func<T, bool>>? predicate = null)
     {
@@ -30,4 +30,9 @@ public class EfRepository<T> : IRepository<T> where T : class
     public virtual void Update(T entity) => _set.Update(entity);
 
     public virtual void Remove(T entity) => _set.Remove(entity);
+
+    public virtual void Delete(T entity) => Remove(entity);
+
+    public virtual IQueryable<T> Query() => _set.AsNoTracking();
+
 }
