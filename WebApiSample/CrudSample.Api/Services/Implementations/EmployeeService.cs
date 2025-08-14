@@ -77,7 +77,8 @@ public class EmployeeService : IEmployeeService
     public async Task DeleteAsync(int id)
     {
         var e = await _employees.GetByIdAsync(id) ?? throw new KeyNotFoundException("Employee not found.");
-        _employees.Remove(e);
+        e.IsDeleted = true;
+        _employees.Update(e);
         await _uow.SaveChangesAsync();
     }
 }

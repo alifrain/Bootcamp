@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using CrudSample.Api.DTOs;
 using CrudSample.Api.Services.Interfaces;
 

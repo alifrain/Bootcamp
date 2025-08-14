@@ -9,7 +9,7 @@ public class EmployeeRepository : EfRepository<Employee>, IEmployeeRepository
 {
     public EmployeeRepository(AppDbContext db) : base(db) { }
 
-    public override IQueryable<Employee> Query()              // <- override, not hide
+    public override IQueryable<Employee> Query()              
         => _set.AsNoTracking().Include(e => e.Department);
 
     public Task<Employee?> GetWithDepartmentAsync(int id)

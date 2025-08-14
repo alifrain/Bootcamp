@@ -16,3 +16,15 @@ public class EmployeeCreateValidator : AbstractValidator<EmployeeCreateDto>
             .GreaterThan(0).WithMessage("DepartmentId must be > 0.");
     }
 }
+
+public class EmployeeUpdateValidator : AbstractValidator<EmployeeUpdateDto>
+{
+    public EmployeeUpdateValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().MinimumLength(3).MaximumLength(80);
+
+        RuleFor(x => x.DepartmentId)
+            .GreaterThan(0);
+    }
+}

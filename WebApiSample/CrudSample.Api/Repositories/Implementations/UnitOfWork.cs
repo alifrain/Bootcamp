@@ -3,11 +3,6 @@ using CrudSample.Api.Repositories.Interfaces;
 
 namespace CrudSample.Api.Repositories.Implementations;
 
-public interface IUnitOfWork
-{
-    Task<int> SaveChangesAsync(CancellationToken ct = default);
-}
-
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _db;

@@ -25,37 +25,63 @@ public class DepartmentService : IDepartmentService
     }
 
     public async Task<IReadOnlyList<DepartmentDto>> GetAllAsync()
-        => await _deps.ListAsync() // fetch entities then map
-           .ContinueWith(t => t.Result.AsQueryable()
-           .Select(d => new DepartmentDto(d.Id, d.Name, d.Employees == null ? 0 : d.Employees.Count))
-           .ToList() as IReadOnlyList<DepartmentDto>);
+        => await _deps.Query()
+                      .Include(d => d.Employees)
+                      .AsNoTracking()
+                      .ProjectTo<DepartmentDto>(_cfg)
+                      .ToListAsync();
 
     public async Task<DepartmentDto?> GetByIdAsync(int id)
     {
-        // need counts -> simple load + map
-        var d = (await _deps.ListAsync(x => x.Id == id)).FirstOrDefault();
-        return d is null ? null : new DepartmentDto(d.Id, d.Name, d.Employees?.Count ?? 0);
+        var d = await _deps.Query()
+                           .Include(x => x.Employees)
+                           .FirstOrDefaultAsync(x => x.Id == id);
+        return d is null ? null : _mapper.Map<DepartmentDto>(d);
     }
 
     public async Task<DepartmentDto> CreateAsync(DepartmentCreateDto dto)
     {
+        var name = dto.Name.Trim();
+        var exists = await _deps.Query().AnyAsync(x => x.Name.ToLower() == name.ToLower());
+        if (exists) throw new InvalidOperationException("Department name already exists.");
+
         var entity = _mapper.Map<Department>(dto);
+        entity.Name = name;
+
         await _deps.AddAsync(entity);
         await _uow.SaveChangesAsync();
+
+        // return fresh DTO (EmployeesCount = 0)
         return new DepartmentDto(entity.Id, entity.Name, 0);
     }
 
     public async Task UpdateAsync(int id, DepartmentUpdateDto dto)
     {
         var d = await _deps.GetByIdAsync(id) ?? throw new KeyNotFoundException("Department not found.");
+
+        var name = dto.Name.Trim();
+        var exists = await _deps.Query()
+            .AnyAsync(x => x.Name.ToLower() == name.ToLower() && x.Id != id);
+        if (exists) throw new InvalidOperationException("Department name already exists.");
+
         _mapper.Map(dto, d);
+        d.Name = name;
+
         _deps.Update(d);
         await _uow.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
     {
-        var d = await _deps.GetByIdAsync(id) ?? throw new KeyNotFoundException("Department not found.");
+        var d = await _deps.Query()
+                           .Include(x => x.Employees)
+                           .FirstOrDefaultAsync(x => x.Id == id)
+                ?? throw new KeyNotFoundException("Department not found.");
+
+        // optional rule: block delete if it still has employees
+        if ((d.Employees?.Count ?? 0) > 0)
+            throw new InvalidOperationException("Cannot delete a department with employees.");
+
         _deps.Remove(d);
         await _uow.SaveChangesAsync();
     }

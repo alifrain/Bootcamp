@@ -10,14 +10,12 @@ public class MappingProfile : Profile
     {
         CreateMap<Employee, EmployeeDto>()
         .ForMember(d => d.DepartmentName, o => o.MapFrom(s => s.Department.Name));
-
         CreateMap<EmployeeCreateDto, Employee>();
         CreateMap<EmployeeUpdateDto, Employee>();
-
-        CreateMap<Department, DepartmentDto>()
-        .ForMember(d => d.EmployeesCount, o => o.MapFrom(s => s.Employees.Count));
-
+        
         CreateMap<DepartmentCreateDto, Department>();
         CreateMap<DepartmentUpdateDto, Department>();
+        CreateMap<Department, DepartmentDto>()
+        .ForMember(d => d.EmployeesCount, o => o.MapFrom(s => s.Employees.Count));
     }
 }
